@@ -128,6 +128,7 @@ const valuesFifthRow = [
   { symbol: "menu", btnSize: 60, keycode: "ContextMenu" }
 ];
 
+
 const main = document.createElement("div");
 main.setAttribute("id", "main");
 main.className = "main";
@@ -170,7 +171,7 @@ comma.className = "extra_symbol";
 const period = document.createElement("span");
 period.className = "extra_symbol";
 
-function paintKeyboardArea(array, classRow) {
+function paintKeyboardArea(array, classRow, bool) {
   const row = document.createElement("div");
   row.className = `${classRow}`;
   sectionKeyboard.append(row);
@@ -186,32 +187,58 @@ function paintKeyboardArea(array, classRow) {
     if (item.keycode === "Period") button.setAttribute("id", "btnPeriod");
     button.setAttribute("value", `${item.keycode}`);
     if (item.btnSize) button.style.width = `${item.btnSize}px`;
+
     const spanLetter = document.createElement("span");
-    spanLetter.className = "letter";
-    spanLetter.innerHTML = item.symbol;
-    button.append(spanLetter);
-    if (item.extaSymbol) {
-      const spanExtraSymbol = document.createElement("span");
-      spanExtraSymbol.className = "extra_symbol";
-      spanExtraSymbol.innerHTML = item.extaSymbol;
-      button.append(spanExtraSymbol);
+    const spanExtraSymbol = document.createElement("span");
+
+    if (bool) {
+      spanLetter.className = "letter";
+      spanLetter.innerHTML = item.symbol;
+
+      button.append(spanLetter);
+      if (item.extaSymbol && item.symbol) {
+        spanExtraSymbol.className = "extra_symbol";
+        spanExtraSymbol.innerHTML = item.extaSymbol;
+        button.append(spanExtraSymbol);
+      }
+    } else {
+      spanLetter.className = "letter";
+      if (item.symbolEn) {
+        spanLetter.innerHTML = item.symbolEn;
+      } else {
+        spanLetter.innerHTML = item.symbol;
+      }
+
+      button.append(spanLetter);
+      if (item.extaSymbolEn) {
+        spanExtraSymbol.className = "extra_symbol";
+        spanExtraSymbol.innerHTML = item.extaSymbolEn;
+        button.append(spanExtraSymbol);
+      }
     }
     row.append(button);
   });
 }
-
-paintKeyboardArea(valuesFistRow, "first_row");
-paintKeyboardArea(valuesSecondRow, "second_row");
-paintKeyboardArea(valuesThirdRow, "third_row");
-paintKeyboardArea(valuesFourthRow, "fourth_row");
-paintKeyboardArea(valuesFifthRow, "fifth_row");
+const langFind = sessionStorage.getItem("russian");
+let boolSesion = true;
+if (langFind === null || langFind === "russian") {
+  boolSesion = true;
+} else {
+  boolSesion = false;
+}
+paintKeyboardArea(valuesFistRow, "first_row", boolSesion);
+paintKeyboardArea(valuesSecondRow, "second_row", boolSesion);
+paintKeyboardArea(valuesThirdRow, "third_row", boolSesion);
+paintKeyboardArea(valuesFourthRow, "fourth_row", boolSesion);
+paintKeyboardArea(valuesFifthRow, "fifth_row", boolSesion);
 
 let shiftOn = false;
 let altOn = false;
 let collectionExtraSymbols;
 let collectionSymbols;
-let russian = true;
-const capsLockOn = false;
+
+
+// const capsLockOn = false;
 window.addEventListener("load", () => {
   const items = document.getElementsByClassName("letter");
   collectionSymbols = items;
@@ -223,11 +250,13 @@ window.addEventListener("load", () => {
 });
 
 document.addEventListener("keydown", (event) => {
-  console.log(event.code);
+  const lang = sessionStorage.getItem("russian");
+  const russian = lang === null ? "russian" : lang;
+
   sectionKeyboard.querySelectorAll(".btn").forEach((item) => {
     if (item.value === event.code) {
       item.classList.add("active");
-      textarea.focus();
+
 
       if (event.code === "Backspace") {
         textarea.value.substring(0, textarea.value.length - 1);
@@ -236,8 +265,7 @@ document.addEventListener("keydown", (event) => {
       } else if (event.code === "Space") {
         textarea.value += " ";
       } else {
-        console.log(item.textContent);
-        textarea.value += item.value;
+        textarea.value += item.textContent;
       }
     }
   });
@@ -250,8 +278,9 @@ document.addEventListener("keydown", (event) => {
   }
 
   if (shiftOn && altOn) {
-    if (russian) {
-      russian = false;
+    if (russian === "russian") {
+      sessionStorage.setItem("russian", "english");
+
       const btnBackquote = document.getElementById("btnBackquote");
       spanExtraBackquote.innerHTML = valuesFistRow[0].extaSymbolEn;
       btnBackquote.append(spanExtraBackquote);
@@ -314,8 +343,7 @@ document.addEventListener("keydown", (event) => {
         }
       }
     } else {
-      russian = true;
-
+      sessionStorage.setItem("russian", "russian");
       spanExtraBackquote.innerHTML = "";
       spanExtraBracketLeft.innerHTML = "";
       spanExtraBracketRight.innerHTML = "";

@@ -172,11 +172,11 @@ comma.className = "extra_symbol";
 const period = document.createElement("span");
 period.className = "extra_symbol";
 // paint keyboard
-const paintKeyboardArea = (array, classRow, bool) => {
+const paintKeyboardArea = (arrayForPaint, classRow, switchLang) => {
   const row = document.createElement("div");
   row.className = `${classRow}`;
   sectionKeyboard.append(row);
-  array.forEach((item) => {
+  arrayForPaint.forEach((item) => {
     const {
       keycode, btnSize, symbol, extaSymbol, symbolEn, extaSymbolEn
     } = item;
@@ -195,7 +195,7 @@ const paintKeyboardArea = (array, classRow, bool) => {
     const spanLetter = document.createElement("span");
     const spanExtraSymbol = document.createElement("span");
 
-    if (bool) {
+    if (switchLang) {
       spanLetter.className = "letter";
       spanLetter.innerHTML = symbol;
       button.append(spanLetter);
@@ -224,18 +224,18 @@ const paintKeyboardArea = (array, classRow, bool) => {
 };
 // check session
 const langFind = sessionStorage.getItem("russian");
-let boolSesion = true;
+let switchSession = true;
 if (langFind === null || langFind === "russian") {
-  boolSesion = true;
+  switchSession = true;
 } else {
-  boolSesion = false;
+  switchSession = false;
 }
 // paint rows
-paintKeyboardArea(valuesFistRow, "first_row", boolSesion);
-paintKeyboardArea(valuesSecondRow, "second_row", boolSesion);
-paintKeyboardArea(valuesThirdRow, "third_row", boolSesion);
-paintKeyboardArea(valuesFourthRow, "fourth_row", boolSesion);
-paintKeyboardArea(valuesFifthRow, "fifth_row", boolSesion);
+paintKeyboardArea(valuesFistRow, "first_row", switchSession);
+paintKeyboardArea(valuesSecondRow, "second_row", switchSession);
+paintKeyboardArea(valuesThirdRow, "third_row", switchSession);
+paintKeyboardArea(valuesFourthRow, "fourth_row", switchSession);
+paintKeyboardArea(valuesFifthRow, "fifth_row", switchSession);
 
 let shiftOn = false;
 let altOn = false;
@@ -255,8 +255,8 @@ window.addEventListener("load", () => {
 });
 
 document.addEventListener("keydown", ({ code }) => {
-  const lang = sessionStorage.getItem("russian");
-  const russian = lang === null ? "russian" : lang;
+  const lang = sessionStorage.getItem("language");
+  const language = lang === null ? "russian" : lang;
   if (code === "ShiftLeft" || code === "ShiftRight") {
     shiftOn = true;
   }
@@ -299,8 +299,8 @@ document.addEventListener("keydown", ({ code }) => {
     }
   });
   if (shiftOn && altOn) {
-    if (russian === "russian") {
-      sessionStorage.setItem("russian", "english");
+    if (language === "russian") {
+      sessionStorage.setItem("language", "english");
 
       const btnBackquote = document.getElementById("btnBackquote");
       spanExtraBackquote.innerHTML = valuesFistRow[0].extaSymbolEn;
@@ -363,7 +363,7 @@ document.addEventListener("keydown", ({ code }) => {
         }
       }
     } else {
-      sessionStorage.setItem("russian", "russian");
+      sessionStorage.setItem("language", "russian");
       spanExtraBackquote.innerHTML = "";
       spanExtraBracketLeft.innerHTML = "";
       spanExtraBracketRight.innerHTML = "";

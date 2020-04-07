@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 const valuesFistRow = [
   {
     symbol: "ё", symbolEn: "`", extaSymbolEn: "~", keycode: "Backquote"
@@ -127,8 +128,7 @@ const valuesFifthRow = [
   { symbol: "►", keycode: "ArrowRight" },
   { symbol: "menu", btnSize: 60, keycode: "ContextMenu" }
 ];
-
-
+// init mains tags
 const main = document.createElement("div");
 main.setAttribute("id", "main");
 main.className = "main";
@@ -136,10 +136,14 @@ const info = document.createElement("div");
 info.className = "infoChangeLang";
 const textInfo = document.createElement("p");
 textInfo.className = "textInfoChangeLang";
-textInfo.textContent = "you can switch the language using the shift and alt keys";
+textInfo.textContent = "you can switch the language using the shift and alt keys ";
+const textOS = document.createElement("p");
+textOS.className = "textOS";
+textOS.textContent = "made in windows os";
 const body = document.getElementsByTagName("body");
 body[0].append(main);
 info.append(textInfo);
+info.append(textOS);
 const textarea = document.createElement("textarea");
 textarea.className = "input_textarea";
 textarea.setAttribute("name", "message");
@@ -147,15 +151,12 @@ textarea.setAttribute("id", "textarea");
 textarea.setAttribute("cols", "30");
 textarea.setAttribute("rows", "10");
 textarea.setAttribute("placeholder", "repeat keyboard");
-
 const sectionKeyboard = document.createElement("section");
 sectionKeyboard.className = "keyboard_area";
 sectionKeyboard.setAttribute("id", "keyboardArea");
-
 main.append(textarea);
 main.append(sectionKeyboard);
 main.append(info);
-
 const spanExtraBackquote = document.createElement("span");
 spanExtraBackquote.className = "extra_symbol";
 const spanExtraBracketLeft = document.createElement("span");
@@ -170,55 +171,58 @@ const comma = document.createElement("span");
 comma.className = "extra_symbol";
 const period = document.createElement("span");
 period.className = "extra_symbol";
-
-function paintKeyboardArea(array, classRow, bool) {
+// paint keyboard
+const paintKeyboardArea = (array, classRow, bool) => {
   const row = document.createElement("div");
   row.className = `${classRow}`;
   sectionKeyboard.append(row);
   array.forEach((item) => {
+    const {
+      keycode, btnSize, symbol, extaSymbol, symbolEn, extaSymbolEn
+    } = item;
     const button = document.createElement("button");
     button.className = "btn";
-    if (item.keycode === "Backquote") button.setAttribute("id", "btnBackquote");
-    if (item.keycode === "BracketLeft") button.setAttribute("id", "btnBracketLeft");
-    if (item.keycode === "BracketRight") button.setAttribute("id", "btnBracketRight");
-    if (item.keycode === "Semicolon") button.setAttribute("id", "btnSemicolon");
-    if (item.keycode === "Quote") button.setAttribute("id", "btnQuote");
-    if (item.keycode === "Comma") button.setAttribute("id", "btnComma");
-    if (item.keycode === "Period") button.setAttribute("id", "btnPeriod");
-    button.setAttribute("value", `${item.keycode}`);
-    if (item.btnSize) button.style.width = `${item.btnSize}px`;
+    if (keycode === "Backquote") button.setAttribute("id", "btnBackquote");
+    if (keycode === "BracketLeft") button.setAttribute("id", "btnBracketLeft");
+    if (keycode === "BracketRight") button.setAttribute("id", "btnBracketRight");
+    if (keycode === "Semicolon") button.setAttribute("id", "btnSemicolon");
+    if (keycode === "Quote") button.setAttribute("id", "btnQuote");
+    if (keycode === "Comma") button.setAttribute("id", "btnComma");
+    if (keycode === "Period") button.setAttribute("id", "btnPeriod");
+    button.setAttribute("value", `${keycode}`);
+    if (btnSize) button.style.width = `${btnSize}px`;
 
     const spanLetter = document.createElement("span");
     const spanExtraSymbol = document.createElement("span");
 
     if (bool) {
       spanLetter.className = "letter";
-      spanLetter.innerHTML = item.symbol;
-
+      spanLetter.innerHTML = symbol;
       button.append(spanLetter);
-      if (item.extaSymbol && item.symbol) {
+      if (extaSymbol && symbol) {
         spanExtraSymbol.className = "extra_symbol";
-        spanExtraSymbol.innerHTML = item.extaSymbol;
+        spanExtraSymbol.innerHTML = extaSymbol;
         button.append(spanExtraSymbol);
       }
     } else {
       spanLetter.className = "letter";
-      if (item.symbolEn) {
-        spanLetter.innerHTML = item.symbolEn;
+      if (symbolEn) {
+        spanLetter.innerHTML = symbolEn;
       } else {
-        spanLetter.innerHTML = item.symbol;
+        spanLetter.innerHTML = symbol;
       }
 
       button.append(spanLetter);
-      if (item.extaSymbolEn) {
+      if (extaSymbolEn) {
         spanExtraSymbol.className = "extra_symbol";
-        spanExtraSymbol.innerHTML = item.extaSymbolEn;
+        spanExtraSymbol.innerHTML = extaSymbolEn;
         button.append(spanExtraSymbol);
       }
     }
     row.append(button);
   });
-}
+};
+// check session
 const langFind = sessionStorage.getItem("russian");
 let boolSesion = true;
 if (langFind === null || langFind === "russian") {
@@ -226,6 +230,7 @@ if (langFind === null || langFind === "russian") {
 } else {
   boolSesion = false;
 }
+// paint rows
 paintKeyboardArea(valuesFistRow, "first_row", boolSesion);
 paintKeyboardArea(valuesSecondRow, "second_row", boolSesion);
 paintKeyboardArea(valuesThirdRow, "third_row", boolSesion);
@@ -236,9 +241,9 @@ let shiftOn = false;
 let altOn = false;
 let collectionExtraSymbols;
 let collectionSymbols;
+let capsLockOn = false;
 
-
-// const capsLockOn = false;
+// get collections letters and extra symbols
 window.addEventListener("load", () => {
   const items = document.getElementsByClassName("letter");
   collectionSymbols = items;
@@ -249,34 +254,50 @@ window.addEventListener("load", () => {
   collectionExtraSymbols = items;
 });
 
-document.addEventListener("keydown", (event) => {
+document.addEventListener("keydown", ({ code }) => {
   const lang = sessionStorage.getItem("russian");
   const russian = lang === null ? "russian" : lang;
-
+  if (code === "ShiftLeft" || code === "ShiftRight") {
+    shiftOn = true;
+  }
+  if (code === "AltLeft" || code === "AltRight") {
+    altOn = true;
+  }
   sectionKeyboard.querySelectorAll(".btn").forEach((item) => {
-    if (item.value === event.code) {
+    const {
+      value, textContent
+    } = item;
+
+    if (value === code) {
       item.classList.add("active");
-
-
-      if (event.code === "Backspace") {
-        textarea.value.substring(0, textarea.value.length - 1);
-      } else if (event.code === "Tab") {
+      if (code === "Backspace" || code === "Enter" || code === "Del") {
+        textarea.focus();
+      } else if (code === "ControlLeft" || code === "ControlRight"
+        || code === "MetaLeft" || code === "AltLeft" || code === "AltRight"
+        || code === "ContextMenu"
+        || code === "ShiftLeft" || code === "ShiftRight") {
+        textarea.blur();
+        textarea.value += "";
+      } else if (code === "Tab") {
+        textarea.blur();
         textarea.value += "     ";
-      } else if (event.code === "Space") {
+      } else if (code === "Space") {
+        textarea.blur();
         textarea.value += " ";
+      } else if (code === "CapsLock") {
+        if (capsLockOn) capsLockOn = false;
+        else capsLockOn = true;
+      } else if (capsLockOn || shiftOn) {
+        textarea.blur();
+        if (textContent[1] === undefined) {
+          textarea.value += textContent[0].toUpperCase();
+        } else { textarea.value += textContent[1]; }
       } else {
-        textarea.value += item.textContent;
+        textarea.blur();
+        textarea.value += textContent[0];
       }
     }
   });
-
-  if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
-    shiftOn = true;
-  }
-  if (event.code === "AltLeft" || event.code === "AltRight") {
-    altOn = true;
-  }
-
   if (shiftOn && altOn) {
     if (russian === "russian") {
       sessionStorage.setItem("russian", "english");
@@ -302,13 +323,13 @@ document.addEventListener("keydown", (event) => {
       const btnPeriod = document.getElementById("btnPeriod");
       period.innerHTML = valuesFourthRow[9].extaSymbolEn;
       btnPeriod.append(period);
-      const arr = [...collectionExtraSymbols];
-      const arr1 = [...collectionSymbols];
-      for (let i = 0; i < arr.length; i += 1) {
-        const firstRow = valuesFistRow.find((value) => value.extaSymbol === arr[i].textContent);
-        const secondRow = valuesSecondRow.find((value) => value.extaSymbol === arr[i].textContent);
-        const thirdRow = valuesThirdRow.find((value) => value.extaSymbol === arr[i].textContent);
-        const fourthRow = valuesFourthRow.find((value) => value.extaSymbol === arr[i].textContent);
+      const arrExstraSymbols = [...collectionExtraSymbols];
+      const arrSymbols = [...collectionSymbols];
+      for (let i = 0; i < arrExstraSymbols.length; i += 1) {
+        const firstRow = valuesFistRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
+        const secondRow = valuesSecondRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
+        const thirdRow = valuesThirdRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
+        const fourthRow = valuesFourthRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
         if (firstRow && firstRow.extaSymbolEn) {
           collectionExtraSymbols[i].innerHTML = firstRow.extaSymbolEn;
         }
@@ -323,12 +344,11 @@ document.addEventListener("keydown", (event) => {
         }
         collectionExtraSymbols[0].innerHTML = valuesFistRow[0].extaSymbolEn;
       }
-
-      for (let i = 0; i < arr1.length; i += 1) {
-        const firstRow = valuesFistRow.find((value) => value.symbol === arr1[i].textContent);
-        const secondRow = valuesSecondRow.find((value) => value.symbol === arr1[i].textContent);
-        const thirdRow = valuesThirdRow.find((value) => value.symbol === arr1[i].textContent);
-        const fourthRow = valuesFourthRow.find((value) => value.symbol === arr1[i].textContent);
+      for (let i = 0; i < arrSymbols.length; i += 1) {
+        const firstRow = valuesFistRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
+        const secondRow = valuesSecondRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
+        const thirdRow = valuesThirdRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
+        const fourthRow = valuesFourthRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
         if (firstRow && firstRow.symbolEn) {
           collectionSymbols[i].innerHTML = firstRow.symbolEn;
         }
@@ -351,15 +371,13 @@ document.addEventListener("keydown", (event) => {
       quote.innerHTML = "";
       comma.innerHTML = "";
       period.innerHTML = "";
-      const arr2 = [...collectionExtraSymbols];
-      const arr3 = [...collectionSymbols];
-      for (let i = 0; i < arr2.length; i += 1) {
-        const firstRow = valuesFistRow.find((value) => value.extaSymbolEn === arr2[i].textContent);
-        // eslint-disable-next-line max-len
-        const secondRow = valuesSecondRow.find((value) => value.extaSymbolEn === arr2[i].textContent);
-        const thirdRow = valuesThirdRow.find((value) => value.extaSymbolEn === arr2[i].textContent);
-        // eslint-disable-next-line max-len
-        const fourthRow = valuesFourthRow.find((value) => value.extaSymbolEn === arr2[i].textContent);
+      const arrExtraSymbolsChange = [...collectionExtraSymbols];
+      const arrSymbolsChange = [...collectionSymbols];
+      for (let i = 0; i < arrExtraSymbolsChange.length; i += 1) {
+        const firstRow = valuesFistRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
+        const secondRow = valuesSecondRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
+        const thirdRow = valuesThirdRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
+        const fourthRow = valuesFourthRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
         if (firstRow && firstRow.extaSymbol) {
           collectionExtraSymbols[i].innerHTML = firstRow.extaSymbol;
         }
@@ -374,11 +392,11 @@ document.addEventListener("keydown", (event) => {
         }
       }
 
-      for (let i = 0; i < arr3.length; i += 1) {
-        const firstRow = valuesFistRow.find((value) => value.symbolEn === arr3[i].textContent);
-        const secondRow = valuesSecondRow.find((value) => value.symbolEn === arr3[i].textContent);
-        const thirdRow = valuesThirdRow.find((value) => value.symbolEn === arr3[i].textContent);
-        const fourthRow = valuesFourthRow.find((value) => value.symbolEn === arr3[i].textContent);
+      for (let i = 0; i < arrSymbolsChange.length; i += 1) {
+        const firstRow = valuesFistRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
+        const secondRow = valuesSecondRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
+        const thirdRow = valuesThirdRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
+        const fourthRow = valuesFourthRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
         if (firstRow && firstRow.symbol) {
           collectionSymbols[i].innerHTML = firstRow.symbol;
         }
@@ -398,16 +416,17 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-document.addEventListener("keyup", (event) => {
+document.addEventListener("keyup", ({ code }) => {
+  textarea.focus();
   sectionKeyboard.querySelectorAll(".btn").forEach((item) => {
-    if (item.value === event.code) {
+    if (item.value === code) {
       item.classList.remove("active");
     }
   });
-  if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+  if (code === "ShiftLeft" || code === "ShiftRight") {
     shiftOn = false;
   }
-  if (event.code === "AltLeft" || event.code === "AltRight") {
+  if (code === "AltLeft" || code === "AltRight") {
     altOn = false;
   }
 });

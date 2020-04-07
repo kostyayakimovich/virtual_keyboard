@@ -84,8 +84,19 @@
   height: 100px;
  
 }
+.textOS{
+  padding-left: 250px;
+  color: rgb(97, 23, 167);
+  text-transform: uppercase;
+  font-family: "LatoRegular", Verdana, serif;
+  text-align: left;
+  font-size: 18px;
+  line-height: 24px;
+
+}
 .textInfoChangeLang{
   padding: 36px 0 20px 50px;
+  color: rgb(39, 7, 70);
   text-transform: uppercase;
   font-family: "LatoRegular", Verdana, serif;
   text-align: left;

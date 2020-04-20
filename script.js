@@ -326,10 +326,11 @@ document.addEventListener("keydown", ({ code }) => {
       const arrExstraSymbols = [...collectionExtraSymbols];
       const arrSymbols = [...collectionSymbols];
       for (let i = 0; i < arrExstraSymbols.length; i += 1) {
-        const firstRow = valuesFistRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
-        const secondRow = valuesSecondRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
-        const thirdRow = valuesThirdRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
-        const fourthRow = valuesFourthRow.find(({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent);
+        const callbackEtraSymbol = ({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent;
+        const firstRow = valuesFistRow.find(callbackEtraSymbol);
+        const secondRow = valuesSecondRow.find(callbackEtraSymbol);
+        const thirdRow = valuesThirdRow.find(callbackEtraSymbol);
+        const fourthRow = valuesFourthRow.find(callbackEtraSymbol);
         if (firstRow && firstRow.extaSymbolEn) {
           collectionExtraSymbols[i].innerHTML = firstRow.extaSymbolEn;
         }
@@ -345,10 +346,11 @@ document.addEventListener("keydown", ({ code }) => {
         collectionExtraSymbols[0].innerHTML = valuesFistRow[0].extaSymbolEn;
       }
       for (let i = 0; i < arrSymbols.length; i += 1) {
-        const firstRow = valuesFistRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
-        const secondRow = valuesSecondRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
-        const thirdRow = valuesThirdRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
-        const fourthRow = valuesFourthRow.find(({ symbol }) => symbol === arrSymbols[i].textContent);
+        const callbackSymbol = ({ symbol }) => symbol === arrSymbols[i].textContent;
+        const firstRow = valuesFistRow.find(callbackSymbol);
+        const secondRow = valuesSecondRow.find(callbackSymbol);
+        const thirdRow = valuesThirdRow.find(callbackSymbol);
+        const fourthRow = valuesFourthRow.find(callbackSymbol);
         if (firstRow && firstRow.symbolEn) {
           collectionSymbols[i].innerHTML = firstRow.symbolEn;
         }
@@ -374,10 +376,11 @@ document.addEventListener("keydown", ({ code }) => {
       const arrExtraSymbolsChange = [...collectionExtraSymbols];
       const arrSymbolsChange = [...collectionSymbols];
       for (let i = 0; i < arrExtraSymbolsChange.length; i += 1) {
-        const firstRow = valuesFistRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
-        const secondRow = valuesSecondRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
-        const thirdRow = valuesThirdRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
-        const fourthRow = valuesFourthRow.find(({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent);
+        const callbackEtraSymbolEn = ({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent;
+        const firstRow = valuesFistRow.find(callbackEtraSymbolEn);
+        const secondRow = valuesSecondRow.find(callbackEtraSymbolEn);
+        const thirdRow = valuesThirdRow.find(callbackEtraSymbolEn);
+        const fourthRow = valuesFourthRow.find(callbackEtraSymbolEn);
         if (firstRow && firstRow.extaSymbol) {
           collectionExtraSymbols[i].innerHTML = firstRow.extaSymbol;
         }
@@ -393,10 +396,11 @@ document.addEventListener("keydown", ({ code }) => {
       }
 
       for (let i = 0; i < arrSymbolsChange.length; i += 1) {
-        const firstRow = valuesFistRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
-        const secondRow = valuesSecondRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
-        const thirdRow = valuesThirdRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
-        const fourthRow = valuesFourthRow.find(({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent);
+        const callbackSymbolEn = ({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent;
+        const firstRow = valuesFistRow.find(callbackSymbolEn);
+        const secondRow = valuesSecondRow.find(callbackSymbolEn);
+        const thirdRow = valuesThirdRow.find(callbackSymbolEn);
+        const fourthRow = valuesFourthRow.find(callbackSymbolEn);
         if (firstRow && firstRow.symbol) {
           collectionSymbols[i].innerHTML = firstRow.symbol;
         }

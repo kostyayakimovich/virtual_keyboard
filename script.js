@@ -434,3 +434,208 @@ document.addEventListener("keyup", ({ code }) => {
     altOn = false;
   }
 });
+
+
+
+
+
+document.addEventListener("mousedown", (event) => {
+  let codeMouse;
+  if (event.target.value === undefined) {
+    codeMouse = event.target.parentNode.value;
+  } else {
+    codeMouse = event.target.value;
+  }
+  console.log(codeMouse);
+  const lang = sessionStorage.getItem("language");
+  const language = lang === null ? "russian" : lang;
+  if (codeMouse === "ShiftLeft" || codeMouse === "ShiftRight") {
+    shiftOn = true;
+  }
+  if (codeMouse === "AltLeft" || codeMouse === "AltRight") {
+    altOn = true;
+  }
+  sectionKeyboard.querySelectorAll(".btn").forEach((item) => {
+
+    const {
+      value, textContent
+    } = item;
+
+    if (value === codeMouse) {
+      item.classList.add("active");
+      if (codeMouse === "Backspace") {
+        textarea.value = textarea.value.slice(0, -1);
+      }
+      else if (codeMouse === "Enter") {
+        textarea.value += ("\n");
+
+      }
+      else if (codeMouse === "ControlLeft" || codeMouse === "ControlRight"
+        || codeMouse === "MetaLeft" || codeMouse === "AltLeft" || codeMouse === "AltRight"
+        || codeMouse === "ContextMenu"
+        || codeMouse === "ShiftLeft" || codeMouse === "ShiftRight") {
+        textarea.blur();
+        textarea.value += "";
+      } else if (codeMouse === "Tab") {
+        textarea.blur();
+        textarea.value += "     ";
+      } else if (codeMouse === "Space") {
+        textarea.blur();
+        textarea.value += " ";
+      } else if (codeMouse === "CapsLock") {
+        if (capsLockOn) capsLockOn = false;
+        else capsLockOn = true;
+      } else if (capsLockOn || shiftOn) {
+        textarea.blur();
+        if (textContent[1] === undefined) {
+          textarea.value += textContent[0].toUpperCase();
+        } else { textarea.value += textContent[1]; }
+      } else {
+        textarea.blur();
+        textarea.value += textContent[0];
+      }
+    }
+  });
+  if (shiftOn && altOn) {
+    if (language === "russian") {
+      sessionStorage.setItem("language", "english");
+
+      const btnBackquote = document.getElementById("btnBackquote");
+      spanExtraBackquote.innerHTML = valuesFistRow[0].extaSymbolEn;
+      btnBackquote.append(spanExtraBackquote);
+      const btnBracketLeft = document.getElementById("btnBracketLeft");
+      spanExtraBracketLeft.innerHTML = valuesSecondRow[11].extaSymbolEn;
+      btnBracketLeft.append(spanExtraBracketLeft);
+      const btnBracketRight = document.getElementById("btnBracketRight");
+      spanExtraBracketRight.innerHTML = valuesSecondRow[12].extaSymbolEn;
+      btnBracketRight.append(spanExtraBracketRight);
+      const btnSemicolon = document.getElementById("btnSemicolon");
+      semicolon.innerHTML = valuesThirdRow[10].extaSymbolEn;
+      btnSemicolon.append(semicolon);
+      const btnQuote = document.getElementById("btnQuote");
+      quote.innerHTML = valuesThirdRow[11].extaSymbolEn;
+      btnQuote.append(quote);
+      const btnComma = document.getElementById("btnComma");
+      comma.innerHTML = valuesFourthRow[8].extaSymbolEn;
+      btnComma.append(comma);
+      const btnPeriod = document.getElementById("btnPeriod");
+      period.innerHTML = valuesFourthRow[9].extaSymbolEn;
+      btnPeriod.append(period);
+      const arrExstraSymbols = [...collectionExtraSymbols];
+      const arrSymbols = [...collectionSymbols];
+      for (let i = 0; i < arrExstraSymbols.length; i += 1) {
+        const callbackEtraSymbol = ({ extaSymbol }) => extaSymbol === arrExstraSymbols[i].textContent;
+        const firstRow = valuesFistRow.find(callbackEtraSymbol);
+        const secondRow = valuesSecondRow.find(callbackEtraSymbol);
+        const thirdRow = valuesThirdRow.find(callbackEtraSymbol);
+        const fourthRow = valuesFourthRow.find(callbackEtraSymbol);
+        if (firstRow && firstRow.extaSymbolEn) {
+          collectionExtraSymbols[i].innerHTML = firstRow.extaSymbolEn;
+        }
+        if (secondRow && secondRow.extaSymbolEn) {
+          collectionExtraSymbols[i].innerHTML = secondRow.extaSymbolEn;
+        }
+        if (thirdRow && thirdRow.extaSymbolEn) {
+          collectionExtraSymbols[i].innerHTML = thirdRow.extaSymbolEn;
+        }
+        if (fourthRow && fourthRow.extaSymbolEn) {
+          collectionExtraSymbols[i].innerHTML = fourthRow.extaSymbolEn;
+        }
+        collectionExtraSymbols[0].innerHTML = valuesFistRow[0].extaSymbolEn;
+      }
+      for (let i = 0; i < arrSymbols.length; i += 1) {
+        const callbackSymbol = ({ symbol }) => symbol === arrSymbols[i].textContent;
+        const firstRow = valuesFistRow.find(callbackSymbol);
+        const secondRow = valuesSecondRow.find(callbackSymbol);
+        const thirdRow = valuesThirdRow.find(callbackSymbol);
+        const fourthRow = valuesFourthRow.find(callbackSymbol);
+        if (firstRow && firstRow.symbolEn) {
+          collectionSymbols[i].innerHTML = firstRow.symbolEn;
+        }
+        if (secondRow && secondRow.symbolEn) {
+          collectionSymbols[i].innerHTML = secondRow.symbolEn;
+        }
+        if (thirdRow && thirdRow.symbolEn) {
+          collectionSymbols[i].innerHTML = thirdRow.symbolEn;
+        }
+        if (fourthRow && fourthRow.symbolEn) {
+          collectionSymbols[i].innerHTML = fourthRow.symbolEn;
+        }
+      }
+    } else {
+      sessionStorage.setItem("language", "russian");
+      spanExtraBackquote.innerHTML = "";
+      spanExtraBracketLeft.innerHTML = "";
+      spanExtraBracketRight.innerHTML = "";
+      semicolon.innerHTML = "";
+      quote.innerHTML = "";
+      comma.innerHTML = "";
+      period.innerHTML = "";
+      const arrExtraSymbolsChange = [...collectionExtraSymbols];
+      const arrSymbolsChange = [...collectionSymbols];
+      for (let i = 0; i < arrExtraSymbolsChange.length; i += 1) {
+        const callbackEtraSymbolEn = ({ extaSymbolEn }) => extaSymbolEn === arrExtraSymbolsChange[i].textContent;
+        const firstRow = valuesFistRow.find(callbackEtraSymbolEn);
+        const secondRow = valuesSecondRow.find(callbackEtraSymbolEn);
+        const thirdRow = valuesThirdRow.find(callbackEtraSymbolEn);
+        const fourthRow = valuesFourthRow.find(callbackEtraSymbolEn);
+        if (firstRow && firstRow.extaSymbol) {
+          collectionExtraSymbols[i].innerHTML = firstRow.extaSymbol;
+        }
+        if (secondRow && secondRow.extaSymbol) {
+          collectionExtraSymbols[i].innerHTML = secondRow.extaSymbol;
+        }
+        if (thirdRow && thirdRow.extaSymbol) {
+          collectionExtraSymbols[i].innerHTML = thirdRow.extaSymbol;
+        }
+        if (fourthRow && fourthRow.extaSymbol) {
+          collectionExtraSymbols[i].innerHTML = fourthRow.extaSymbol;
+        }
+      }
+
+      for (let i = 0; i < arrSymbolsChange.length; i += 1) {
+        const callbackSymbolEn = ({ symbolEn }) => symbolEn === arrSymbolsChange[i].textContent;
+        const firstRow = valuesFistRow.find(callbackSymbolEn);
+        const secondRow = valuesSecondRow.find(callbackSymbolEn);
+        const thirdRow = valuesThirdRow.find(callbackSymbolEn);
+        const fourthRow = valuesFourthRow.find(callbackSymbolEn);
+        if (firstRow && firstRow.symbol) {
+          collectionSymbols[i].innerHTML = firstRow.symbol;
+        }
+        if (secondRow && secondRow.symbol) {
+          collectionSymbols[i].innerHTML = secondRow.symbol;
+        }
+        if (thirdRow && thirdRow.symbol) {
+          collectionSymbols[i].innerHTML = thirdRow.symbol;
+        }
+        if (fourthRow && fourthRow.symbol) {
+          collectionSymbols[i].innerHTML = fourthRow.symbol;
+        }
+      }
+    }
+    shiftOn = false;
+    altOn = false;
+  }
+});
+document.addEventListener("mouseup", (event) => {
+  let codeMouse;
+  if (event.target.value === undefined) {
+    codeMouse = event.target.parentNode.value;
+  } else {
+    codeMouse = event.target.value;
+  }
+  textarea.focus();
+  sectionKeyboard.querySelectorAll(".btn").forEach((item) => {
+    if (item.value === codeMouse) {
+      item.classList.remove("active");
+    }
+  });
+  if (codeMouse === "ShiftLeft" || codeMouse === "ShiftRight") {
+    shiftOn = false;
+  }
+  if (codeMouse === "AltLeft" || codeMouse === "AltRight") {
+    altOn = false;
+  }
+});
+
+

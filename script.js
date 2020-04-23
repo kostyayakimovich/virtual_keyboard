@@ -637,5 +637,3 @@ document.addEventListener("mouseup", (event) => {
     altOn = false;
   }
 });
-
-
